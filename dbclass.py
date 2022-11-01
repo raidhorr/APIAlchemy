@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, Sequence, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, Float, Text, Sequence, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base
 
 from sqlalch import engine
@@ -15,6 +15,14 @@ class User(Base):
     name = Column(Text)
     otc = Column(Text)
     UniqueConstraint(email)
+
+
+class Coords(Base):
+    __tablename__ = "coords"
+    id = Column(Integer, Sequence("coords_id_seq"), primary_key=True)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    height = Column(Integer)
 
 
 Base.metadata.create_all(engine)
