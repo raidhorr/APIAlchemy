@@ -16,7 +16,8 @@ DATABASE = {
     'port': os.getenv('FSTR_DB_PORT'),
     'username': os.getenv('FSTR_DB_LOGIN'),
     'password': os.getenv('FSTR_DB_PASS'),
+    'database': 'postgres'
 }
 
-engine = create_engine(URL(**DATABASE))
-print(engine)
+engine = create_engine(URL(**DATABASE), echo=True)
+
