@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, Float, Text, Sequence, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, Float, Text, Time, Sequence, ForeignKey, UniqueConstraint
+from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.orm import declarative_base
 
 from sqlalch import engine
@@ -23,6 +24,14 @@ class Coords(Base):
     latitude = Column(Float)
     longitude = Column(Float)
     height = Column(Integer)
+
+
+class PerevalImages(Base):
+    __tablename__ = "pereval_images"
+    id = Column(Integer, Sequence("pereval_images_id_seq"), primary_key=True)
+    date_added = Column(Time)
+    title = Column(Text)
+    data = Column(BYTEA)
 
 
 Base.metadata.create_all(engine)
