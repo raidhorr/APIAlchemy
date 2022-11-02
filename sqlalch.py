@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
 
 import os
 from pathlib import Path
@@ -20,4 +21,7 @@ DATABASE = {
 }
 
 engine = create_engine(URL(**DATABASE), echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
+
 
