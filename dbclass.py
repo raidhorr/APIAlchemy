@@ -49,6 +49,7 @@ class PerevalAdded(Base):
     level_autumn = Column(Text)
     level_spring = Column(Text)
     images = Column(ARRAY(Integer))
+    UniqueConstraint(user_id, coords_id)
 
 
 Base.metadata.create_all(engine)
