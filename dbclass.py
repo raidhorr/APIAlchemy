@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, Float, Text, Time, Sequence, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import BYTEA, ARRAY
 from sqlalchemy.orm import declarative_base
+from psycopg2.errors import UniqueViolation
+from sqlalchemy.exc import IntegrityError
 from json import loads, dumps
 from datetime import datetime
 
@@ -57,7 +59,7 @@ class PerevalAdded(Base):
         try:
             pydata = loads(data)
             email = pydata['user']['email']
-            user = session.query(User).filter(User.email == email)
+            user = session.query(User).filter(User.email == email).all()
             if user:
                 user_id = user[0].id
             else:
@@ -78,7 +80,7 @@ class PerevalAdded(Base):
                 Coords.latitude == latitude and
                 Coords.longitude == longitude and
                 Coords.height == height
-            )
+            ).all()
             if coords:
                 coords_id = coords[0].id
             else:
@@ -96,10 +98,10 @@ class PerevalAdded(Base):
                 image = PerevalImages(
                     date_added=date_added,
                     title=rec['title'],
-                    data=rec['data']
+                    data=bytes.fromhex(rec['data'])
                 )
                 session.add(image)
-                session.commmit()
+                session.commit()
                 image_list.append(image.id)
 
             pereval = PerevalAdded(
@@ -127,14 +129,14 @@ class PerevalAdded(Base):
         except KeyError as exp:
             res = {
                 'status': '400',
-                'message': exp,
+                'message': str(exp),
                 'id': None
             }
             return dumps(res)
         except Exception as exp:
             res = {
                 'status': '500',
-                'message': exp,
+                'message': str(exp),
                 'id': None
             }
             return dumps(res)

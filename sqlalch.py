@@ -20,7 +20,7 @@ DATABASE = {
     'database': 'postgres'
 }
 
-engine = create_engine(URL(**DATABASE), echo=True)
+engine = create_engine(URL(**DATABASE))
 Session = sessionmaker(bind=engine)
 session = Session()
 
